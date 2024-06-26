@@ -55,27 +55,35 @@ public class ClienteServiceImple implements ClienteService {
 			if(listado.isEmpty()) {
 				kpi.setDesviacion(0.00);
 				kpi.setPromedio(0.00);
+				kpi.setMensaje("No hay clientes en la lista. Agregue clientes para calcular KPI.");
 			}else {
 
-				 Double suma = 0.0;
-				for (Cliente cliente : listado) {
-					 suma += cliente.getEdad();
-		        }
-				Double prom = suma / listado.size();
-				
-				Double totalEdades = 0.0;
-				
-				for (Cliente cliente : listado) {
-					Double diferencia = cliente.getEdad() - prom;
-					Double potencia = Math.pow(diferencia, 2);
-					totalEdades += potencia;
+				if(listado.size() > 1 ){
+					Double suma = 0.0;
+					for (Cliente cliente : listado) {
+						 suma += cliente.getEdad();
+					}
+					Double prom = suma / listado.size();
+					
+					Double totalEdades = 0.0;
+					
+					for (Cliente cliente : listado) {
+						Double diferencia = cliente.getEdad() - prom;
+						Double potencia = Math.pow(diferencia, 2);
+						totalEdades += potencia;
+					}
+					
+					Double desviacion = Math.sqrt(totalEdades/(listado.size()-1));
+					
+					kpi.setPromedio(prom);
+					kpi.setDesviacion(desviacion);
+					
+				}else {
+					kpi.setDesviacion(0.00);
+					kpi.setPromedio(0.00);
+					kpi.setMensaje("Datos insuficientes. Debe agregar al menos 2 clientes para calcular la desviación estándar.");
 				}
-				
-				Double desviacion = Math.sqrt(totalEdades/(listado.size()-1));
-				
-				kpi.setPromedio(prom);
-				kpi.setDesviacion(desviacion);
-				
+
 			}
 			return kpi;
 		} catch (Exception e) {
