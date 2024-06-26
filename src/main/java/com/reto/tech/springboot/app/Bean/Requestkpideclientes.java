@@ -13,4 +13,5 @@ public class Requestkpideclientes {
 
 	private Double promedio;
 	private Double desviacion;
+	private String mensaje;
 }
